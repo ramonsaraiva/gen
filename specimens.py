@@ -4,7 +4,9 @@ import random
 
 class Specimen:
 
-    def __init__(self):
+    def __init__(self, x=None, y=None):
+        self.x = x
+        self.y = y
         self.fitness = 0
 
     def generate(self):
@@ -55,8 +57,8 @@ class SimpleSpecimen(Specimen):
 
 class WeirdSpecimen(SimpleSpecimen):
 
-    RANGE = 100.0
-    RANGE_OFFSET = 50.0
+    RANGE = 200.0
+    RANGE_OFFSET = 100.0
 
     def calculate_fitness(self):
         self.fitness = sum([

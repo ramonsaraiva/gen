@@ -1,4 +1,10 @@
-from algorithms import RouletteSelectionGeneticAlgorithm
+from algorithms import (
+    RouletteSelectionGeneticAlgorithm,
+    SimpleGeneticAlgorithm,
+)
 
 if __name__ == '__main__':
-    RouletteSelectionGeneticAlgorithm().run()
+
+    roulette = RouletteSelectionGeneticAlgorithm()
+    roulette.plot_2d_fitness()
+    roulette.plot_3d_fitness()

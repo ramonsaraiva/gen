@@ -1,6 +1,7 @@
 import random
 
 from mutations import GaussianElitismMutationMixin
+from output import GeneticOutputMixin
 from specimens import (
     SimpleSpecimen,
     Specimen,
@@ -44,6 +45,9 @@ class GeneticAlgorithm:
     def process_generation(self, generation):
         raise NotImplementedError()
 
+    def post(self):
+        pass
+
     def run(self):
         self.generate_population()
         self.calculate_fitness()
@@ -51,14 +55,7 @@ class GeneticAlgorithm:
         for generation in range(self.generations):
             self.process_generation(generation)
 
-
-class GeneticOutputMixin:
-
-    def output_population(self, generation=None):
-        if generation is not None:
-            print('\nGeneration {}\n'.format(generation))
-        for i, specimen in enumerate(self.population):
-            print('Specimen {0}. {1}'.format(i, specimen))
+        self.post()
 
 
 class SimpleGeneticAlgorithm(GeneticOutputMixin, GaussianElitismMutationMixin,
@@ -77,7 +74,6 @@ class SimpleGeneticAlgorithm(GeneticOutputMixin, GaussianElitismMutationMixin,
             specimen.crossover(selected)
 
     def process_generation(self, generation):
-        super().process_generation(generation)
         selected = self.selection()
         self.crossover(selected)
         self.mutation(selected)
