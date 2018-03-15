@@ -3,6 +3,7 @@ import random
 from specimens import (
     SimpleSpecimen,
     Specimen,
+    WeirdSpecimen,
 )
 
 
@@ -14,8 +15,9 @@ class GeneticAlgorithm:
     generations = 0.0
     mutation_probability = 0.0
 
-    def __init__(self):
-        self.population = [self.specimen() for _ in range(self.population_size)]
+    def __init__(self, specimen=None):
+        specimen = specimen or self.specimen
+        self.population = [specimen() for _ in range(self.population_size)]
 
     def generate_population(self):
         for specimen in self.population:
@@ -72,7 +74,6 @@ class SingleSelectionGeneticAlgorithm(GeneticAlgorithm):
 
 class SimpleGeneticAlgorithm(GeneticOutputMixin,
                              SingleSelectionGeneticAlgorithm):
-
     specimen = SimpleSpecimen
 
     population_size = 10
@@ -93,3 +94,8 @@ class SimpleGeneticAlgorithm(GeneticOutputMixin,
     def process_generation(self, generation):
         super().process_generation(generation)
         self.output_population(generation)
+
+
+class RouletteSelectionGeneticAlgorithm(SimpleGeneticAlgorithm):
+
+    specimen = WeirdSpecimen

@@ -1,3 +1,4 @@
+import math
 import random
 
 
@@ -50,3 +51,15 @@ class SimpleSpecimen(Specimen):
         q = (q * 2.0) - 1.0
         q = q / 4.0
         return 1.0 + q
+
+
+class WeirdSpecimen(SimpleSpecimen):
+
+    def calculate_fitness(self):
+        wow = [
+            math.sin(pow(self.x, 3.0)),
+            math.sqrt(pow(self.x, 2.0)),
+            math.sin(self.y) * 3.0,
+            math.sqrt(math.sqrt(math.sqrt(pow(self.x, 2) + pow(self.y, 2))))
+        ]
+        self.fitness = sum(wow)
