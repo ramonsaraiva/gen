@@ -1,5 +1,6 @@
 import random
 
+from mutations import GaussianElitismMutationMixin
 from specimens import (
     SimpleSpecimen,
     Specimen,
@@ -72,7 +73,7 @@ class SingleSelectionGeneticAlgorithm(GeneticAlgorithm):
         self.calculate_fitness()
 
 
-class SimpleGeneticAlgorithm(GeneticOutputMixin,
+class SimpleGeneticAlgorithm(GeneticOutputMixin, GaussianElitismMutationMixin,
                              SingleSelectionGeneticAlgorithm):
     specimen = SimpleSpecimen
 
@@ -83,14 +84,6 @@ class SimpleGeneticAlgorithm(GeneticOutputMixin,
     def selection(self):
         return min(self.population)
 
-    def mutation(self, selected):
-        """Gauss mutation with elitism"""
-        for specimen in self.population:
-            if specimen == selected:
-                continue
-            if random.random() < self.mutation_probability:
-                specimen.mutate()
-
     def process_generation(self, generation):
         super().process_generation(generation)
         self.output_population(generation)
@@ -99,3 +92,7 @@ class SimpleGeneticAlgorithm(GeneticOutputMixin,
 class RouletteSelectionGeneticAlgorithm(SimpleGeneticAlgorithm):
 
     specimen = WeirdSpecimen
+
+    def selection(self):
+        # TODO: Roulette selection
+        return min(self.population)
