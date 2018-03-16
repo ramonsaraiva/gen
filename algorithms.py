@@ -78,15 +78,12 @@ class SimpleGeneticAlgorithm(GeneticOutputMixin, GaussianElitismMutationMixin,
         self.crossover(selected)
         self.mutation(selected)
         self.calculate_fitness()
+        self.output_population(generation)
 
 
-class RouletteSelectionGeneticAlgorithm(GeneticOutputMixin,
-                                        GeneticAlgorithm):
+class RouletteSelectionGeneticAlgorithm(SimpleGeneticAlgorithm):
 
     specimen = WeirdSpecimen
-
-    population_size = 10
-    generations = 10
 
     def selection(self):
         fitnesses = self.fitnesses
@@ -101,13 +98,3 @@ class RouletteSelectionGeneticAlgorithm(GeneticOutputMixin,
             probability_sum += relational_fitness
             if rand < probability_sum:
                 return self.population[i]
-
-    def crossover(self, selected):
-        for specimen in self.population:
-            specimen.crossover(selected)
-
-    def process_generation(self, generation):
-        selected = self.selection()
-        self.crossover(selected)
-        self.calculate_fitness()
-        self.output_population(generation)
