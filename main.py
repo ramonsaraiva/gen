@@ -1,10 +1,14 @@
 from algorithms import (
     RouletteSelectionGeneticAlgorithm,
-    SimpleGeneticAlgorithm,
+    StochasticSelectionGeneticAlgorithm,
 )
 
 
 if __name__ == '__main__':
     roulette = RouletteSelectionGeneticAlgorithm()
-    roulette.run()
-    roulette.plot_2d_fitness()
+    stochastic = StochasticSelectionGeneticAlgorithm()
+
+    #roulette.run()
+    #roulette.plot_2d_fitness()
+
+    stochastic.run()

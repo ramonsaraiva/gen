@@ -91,3 +91,7 @@ class RouletteSelectionGeneticAlgorithm(RouletteSelection,
 class StochasticSelectionGeneticAlgorithm(StochasticUniversalSamplingSelection,
                                           SimpleGeneticAlgorithm):
     specimen = WeirdSpecimen
+
+    def process_generation(self, generation):
+        # TODO: finish generation processing
+        selected = self.selection(4)
