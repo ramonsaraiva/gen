@@ -1,7 +1,9 @@
-import random
-
 from mutations import GaussianElitismMutationMixin
 from output import GeneticOutputMixin
+from selections import (
+    RouletteSelection,
+    StochasticUniversalSamplingSelection,
+)
 from specimens import (
     SimpleSpecimen,
     Specimen,
@@ -81,20 +83,11 @@ class SimpleGeneticAlgorithm(GeneticOutputMixin, GaussianElitismMutationMixin,
         self.output_population(generation)
 
 
-class RouletteSelectionGeneticAlgorithm(SimpleGeneticAlgorithm):
-
+class RouletteSelectionGeneticAlgorithm(RouletteSelection,
+                                        SimpleGeneticAlgorithm):
     specimen = WeirdSpecimen
 
-    def selection(self):
-        fitnesses = self.fitnesses
-        total_fitness = sum(fitnesses)
 
-        relational_fitnesses = [
-            fitness / total_fitness for fitness in fitnesses]
-
-        rand = random.random()
-        probability_sum = 0
-        for i, relational_fitness in enumerate(relational_fitnesses):
-            probability_sum += relational_fitness
-            if rand < probability_sum:
-                return self.population[i]
+class StochasticSelectionGeneticAlgorithm(StochasticUniversalSamplingSelection,
+                                          SimpleGeneticAlgorithm):
+    specimen = WeirdSpecimen
