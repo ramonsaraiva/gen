@@ -13,6 +13,6 @@ if __name__ == '__main__':
     tournament = TournamentSelectionGeneticAlgorithm()
 
     #simple.run()
-    #roulette.run()
+    roulette.run()
     #stochastic.run()
-    tournament.run()
+    #tournament.run()

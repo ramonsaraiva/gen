@@ -112,6 +112,7 @@ class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
     Roulette Selection with Gaussian Elitism Mutation
     """
     specimen = WeirdSpecimen
+    selection_size = 2
 
 
 class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,

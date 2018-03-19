@@ -19,19 +19,20 @@ class RouletteSelectionMixin:
     """
 
     def selection(self):
-        # TODO: make it possible to select more than 1 specimen
         fitnesses = self.fitnesses
         total_fitness = sum(fitnesses)
 
         relational_fitnesses = [
             fitness / total_fitness for fitness in fitnesses]
 
-        rand = random.random()
-        probability_sum = 0
-        for i, relational_fitness in enumerate(relational_fitnesses):
-            probability_sum += relational_fitness
-            if rand < probability_sum:
-                return [self.population[i]]
+        for _ in range(self.selection_size):
+            rand = random.random()
+            probability_sum = 0
+            for i, relational_fitness in enumerate(relational_fitnesses):
+                probability_sum += relational_fitness
+                if rand < probability_sum:
+                    yield self.population[i]
+                    break
 
 
 class StochasticSelectionMixin:
