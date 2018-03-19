@@ -2,15 +2,24 @@ import numpy as np
 import random
 
 
-class SimpleSelectionMixin:
+class SimpleSelectionMixin: 
+    """
+    Simple selection used in SimpleAG, selects the specimen with the worst
+    fitness.
+    """
 
     def selection(self):
         return [min(self.population)]
 
 
 class RouletteSelectionMixin:
+    """
+    Selects N specimens, randomizing an offset and retrieving a specific
+    specimen from the cumulative sum of each relative fitness.
+    """
 
     def selection(self):
+        # TODO: make it possible to select more than 1 specimen
         fitnesses = self.fitnesses
         total_fitness = sum(fitnesses)
 
@@ -26,6 +35,11 @@ class RouletteSelectionMixin:
 
 
 class StochasticSelectionMixin:
+    """
+    Similar idea to the Roulette Selection, but adds a static interval to
+    the starting random offset, for each specimen to be selected.
+    (1 / length of the population)
+    """
 
     def selection(self):
         fitnesses = self.fitnesses
@@ -49,10 +63,13 @@ class StochasticSelectionMixin:
 
 
 class TournamentThreeTwoSelectionMixin:
+    """
+    Selects N specimens, starting with 3 random ones and yielding the one
+    with better fitness. 
+    """
 
     def selection(self):
-        winners = [
-            self.population[random.randint(0, len(self.population) - 1)]
-            for _ in range(3)
-        ]
-        return sorted(winners, reverse=True)[0:2]
+        for _ in range(self.selection_size):
+            yield max([
+                self.population[random.randint(0, len(self.population) - 1)]
+                for _ in range(3)])

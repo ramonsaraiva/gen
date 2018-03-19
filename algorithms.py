@@ -79,6 +79,10 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
     mutation_probability = 0.2
 
     def crossover(self, selected):
+        """
+        Crosses every specimen of the population to one of the selected
+        specimens.
+        """
         offset = 0
         for specimen in self.population:
             if specimen == selected[offset % len(selected)]:
@@ -104,12 +108,18 @@ class SimpleGeneticAlgorithm(SimpleSelectionMixin, GaussianElitismMutationMixin,
 
 class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
                                         SimpleGeneticAlgorithm):
+    """
+    Roulette Selection with Gaussian Elitism Mutation
+    """
     specimen = WeirdSpecimen
 
 
 class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,
                                           GaussianElitismMutationMixin,
                                           MetaGeneticAlgorithm):
+    """
+    Stochastic Selection with Gaussian Elitism Mutation
+    """
     specimen = WeirdSpecimen
     selection_size = 4
 
@@ -117,4 +127,7 @@ class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,
 class TournamentSelectionGeneticAlgorithm(TournamentThreeTwoSelectionMixin,
                                           GaussianElitismMutationMixin,
                                           MetaGeneticAlgorithm):
+    """
+    Tournament (of three, of two) Selection with Gaussian Elitism Mutatio
+    """
     specimen = WeirdSpecimen
