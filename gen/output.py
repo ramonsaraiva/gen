@@ -17,7 +17,7 @@ class GeneticOutputMixin:
     def fitness_population(self):
         for i in range(int(self.specimen.RANGE) + 1):
             v = i - self.specimen.RANGE_OFFSET
-            specimen = self.specimen(v, v)
+            specimen = self.specimen(i, v, v)
             specimen.calculate_fitness()
             yield specimen
 

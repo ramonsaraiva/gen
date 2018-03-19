@@ -32,3 +32,5 @@ if __name__ == '__main__':
     args = parse_args()
     algorithm = ALGORITHMS[args.algorithm]()
     algorithm.run()
+
+    algorithm.plot_2d_fitness()
