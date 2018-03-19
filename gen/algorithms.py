@@ -129,6 +129,6 @@ class TournamentSelectionGeneticAlgorithm(TournamentThreeTwoSelectionMixin,
                                           GaussianElitismMutationMixin,
                                           MetaGeneticAlgorithm):
     """
-    Tournament (of three, of two) Selection with Gaussian Elitism Mutatio
+    Tournament (of three, of two) Selection with Gaussian Elitism Mutation
     """
     specimen = WeirdSpecimen
