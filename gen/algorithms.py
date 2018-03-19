@@ -1,12 +1,12 @@
-from mutations import GaussianElitismMutationMixin
-from output import GeneticOutputMixin
-from selections import (
+from .mutations import GaussianElitismMutationMixin
+from .output import GeneticOutputMixin
+from .selections import (
     RouletteSelectionMixin,
     SimpleSelectionMixin,
     StochasticSelectionMixin,
     TournamentThreeTwoSelectionMixin,
 )
-from specimens import (
+from .specimens import (
     SimpleSpecimen,
     Specimen,
     WeirdSpecimen,

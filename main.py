@@ -1,4 +1,4 @@
-from algorithms import (
+from gen.algorithms import (
     RouletteSelectionGeneticAlgorithm,
     SimpleGeneticAlgorithm,
     StochasticSelectionGeneticAlgorithm,
@@ -14,5 +14,5 @@ if __name__ == '__main__':
 
     #simple.run()
     #roulette.run()
-    stochastic.run()
-    #tournament.run()
+    #stochastic.run()
+    tournament.run()
