@@ -4,6 +4,7 @@ from selections import (
     RouletteSelectionMixin,
     SimpleSelectionMixin,
     StochasticSelectionMixin,
+    TournamentThreeTwoSelectionMixin,
 )
 from specimens import (
     SimpleSpecimen,
@@ -13,16 +14,20 @@ from specimens import (
 
 
 class GeneticAlgorithm:
+    """
+    Base class for a genetic algorithm
+    """
 
     specimen = Specimen
 
     population_size = 0
+    selection_size = 1
     generations = 0
     mutation_probability = 0.0
 
     def __init__(self, specimen=None):
         specimen = specimen or self.specimen
-        self.population = [specimen() for _ in range(self.population_size)]
+        self.population = [specimen(i) for i in range(self.population_size)]
 
     @property
     def fitnesses(self):
@@ -42,7 +47,7 @@ class GeneticAlgorithm:
     def crossover(self, selected):
         raise NotImplementedError()
 
-    def mutation(self):
+    def mutation(self, selected):
         raise NotImplementedError()
 
     def process_generation(self, generation):
@@ -61,24 +66,40 @@ class GeneticAlgorithm:
         self.post()
 
 
-class SimpleGeneticAlgorithm(GeneticOutputMixin, SimpleSelectionMixin,
-                             GaussianElitismMutationMixin, GeneticAlgorithm):
-    specimen = SimpleSpecimen
-
+class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
+    """
+    A meta genetic algorithm follows the simple order of:
+      * selection
+      * crossover
+      * mutation
+      * fitness calculation
+    """
     population_size = 10
     generations = 10
     mutation_probability = 0.2
 
     def crossover(self, selected):
+        offset = 0
         for specimen in self.population:
-            specimen.crossover(selected)
+            if specimen == selected[offset % len(selected)]:
+                continue
+            specimen.crossover(selected[offset % len(selected)])
+            offset += 1
 
     def process_generation(self, generation):
-        selected = self.selection()
+        selected = list(self.selection())
         self.crossover(selected)
-        self.mutation([selected])
+        self.mutation(selected)
         self.calculate_fitness()
         self.output_population(generation)
+
+
+class SimpleGeneticAlgorithm(SimpleSelectionMixin, GaussianElitismMutationMixin,
+                             MetaGeneticAlgorithm):
+    """
+    Simple genetic algorithm replicating what SimpleAG.cpp does
+    """
+    specimen = SimpleSpecimen
 
 
 class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
@@ -87,19 +108,13 @@ class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
 
 
 class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,
-                                          SimpleGeneticAlgorithm):
+                                          GaussianElitismMutationMixin,
+                                          MetaGeneticAlgorithm):
     specimen = WeirdSpecimen
+    selection_size = 4
 
-    def crossover(self, selected):
-        offset = 0
-        for specimen in self.population:
-            if specimen == self.population[offset]:
-                continue
-            specimen.crossover(selected[offset % len(selected)])
 
-    def process_generation(self, generation):
-        selected = list(self.selection(4))
-        self.crossover(selected)
-        self.mutation(selected)
-        self.calculate_fitness()
-        self.output_population(generation)
+class TournamentSelectionGeneticAlgorithm(TournamentThreeTwoSelectionMixin,
+                                          GaussianElitismMutationMixin,
+                                          MetaGeneticAlgorithm):
+    specimen = WeirdSpecimen

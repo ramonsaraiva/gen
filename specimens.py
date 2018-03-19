@@ -4,7 +4,8 @@ import random
 
 class Specimen:
 
-    def __init__(self, x=None, y=None):
+    def __init__(self, id, x=None, y=None):
+        self.id = id
         self.x = x
         self.y = y
         self.fitness = 0
@@ -29,6 +30,9 @@ class SimpleSpecimen(Specimen):
 
     def __str__(self):
         return '{0:.3f} {1:.3f} {2:.3f}'.format(self.x, self.y, self.fitness)
+
+    def __eq__(self, other):
+        return self.id == other.id
 
     def __lt__(self, other):
         return self.fitness < other.fitness

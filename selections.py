@@ -5,7 +5,7 @@ import random
 class SimpleSelectionMixin:
 
     def selection(self):
-        return min(self.population)
+        return [min(self.population)]
 
 
 class RouletteSelectionMixin:
@@ -22,12 +22,12 @@ class RouletteSelectionMixin:
         for i, relational_fitness in enumerate(relational_fitnesses):
             probability_sum += relational_fitness
             if rand < probability_sum:
-                return self.population[i]
+                return [self.population[i]]
 
 
 class StochasticSelectionMixin:
 
-    def selection(self, n):
+    def selection(self):
         fitnesses = self.fitnesses
         total_fitness = sum(fitnesses)
 
@@ -38,7 +38,7 @@ class StochasticSelectionMixin:
         spacing = 1 / len(self.population)
         offsets = [
             ((i * spacing) + initial_offset) % 1
-            for i in range(n)
+            for i in range(self.selection_size)
         ]
 
         for offset in offsets:
@@ -46,3 +46,13 @@ class StochasticSelectionMixin:
                 if offset < probability:
                     yield self.population[i]
                     break
+
+
+class TournamentThreeTwoSelectionMixin:
+
+    def selection(self):
+        winners = [
+            self.population[random.randint(0, len(self.population) - 1)]
+            for _ in range(3)
+        ]
+        return sorted(winners, reverse=True)[0:2]
