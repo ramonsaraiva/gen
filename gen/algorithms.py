@@ -92,7 +92,7 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
             specimen.crossover(selected[offset % len(selected)])
             offset += 1
 
-    def mutate(self, selected):
+    def mutation(self, selected):
         for specimen in self.population:
             if specimen in selected:
                 continue
@@ -112,11 +112,6 @@ class SimpleGeneticAlgorithm(SimpleSelectionMixin, MetaGeneticAlgorithm):
     Simple genetic algorithm replicating what SimpleAG.cpp does
     """
     specimen = SimpleSpecimen
-
-
-class StochasticSimpleGeneticAlgorithm(StochasticSelectionMixin,
-                                       MetaGeneticAlgorithm):
-    specimen = SimpleSpecimen 
 
 
 class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,

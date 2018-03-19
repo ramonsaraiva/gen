@@ -9,6 +9,6 @@ class GaussianElitismMutationMixin:
         q = q / 4.0
         return 1.0 + q
 
-    def mutate(self, selected):
+    def mutate(self):
         self.x = self.x * self.gaussian_multiplier
         self.y = self.y * self.gaussian_multiplier
