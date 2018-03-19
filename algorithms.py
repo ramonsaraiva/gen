@@ -1,8 +1,9 @@
 from mutations import GaussianElitismMutationMixin
 from output import GeneticOutputMixin
 from selections import (
-    RouletteSelection,
-    StochasticUniversalSamplingSelection,
+    RouletteSelectionMixin,
+    SimpleSelectionMixin,
+    StochasticSelectionMixin,
 )
 from specimens import (
     SimpleSpecimen,
@@ -60,16 +61,13 @@ class GeneticAlgorithm:
         self.post()
 
 
-class SimpleGeneticAlgorithm(GeneticOutputMixin, GaussianElitismMutationMixin,
-                             GeneticAlgorithm):
+class SimpleGeneticAlgorithm(GeneticOutputMixin, SimpleSelectionMixin,
+                             GaussianElitismMutationMixin, GeneticAlgorithm):
     specimen = SimpleSpecimen
 
     population_size = 10
     generations = 10
     mutation_probability = 0.2
-
-    def selection(self):
-        return min(self.population)
 
     def crossover(self, selected):
         for specimen in self.population:
@@ -78,20 +76,30 @@ class SimpleGeneticAlgorithm(GeneticOutputMixin, GaussianElitismMutationMixin,
     def process_generation(self, generation):
         selected = self.selection()
         self.crossover(selected)
-        self.mutation(selected)
+        self.mutation([selected])
         self.calculate_fitness()
         self.output_population(generation)
 
 
-class RouletteSelectionGeneticAlgorithm(RouletteSelection,
+class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
                                         SimpleGeneticAlgorithm):
     specimen = WeirdSpecimen
 
 
-class StochasticSelectionGeneticAlgorithm(StochasticUniversalSamplingSelection,
+class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,
                                           SimpleGeneticAlgorithm):
     specimen = WeirdSpecimen
 
+    def crossover(self, selected):
+        offset = 0
+        for specimen in self.population:
+            if specimen == self.population[offset]:
+                continue
+            specimen.crossover(selected[offset % len(selected)])
+
     def process_generation(self, generation):
-        # TODO: finish generation processing
-        selected = self.selection(4)
+        selected = list(self.selection(4))
+        self.crossover(selected)
+        self.mutation(selected)
+        self.calculate_fitness()
+        self.output_population(generation)

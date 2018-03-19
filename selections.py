@@ -2,7 +2,13 @@ import numpy as np
 import random
 
 
-class RouletteSelection:
+class SimpleSelectionMixin:
+
+    def selection(self):
+        return min(self.population)
+
+
+class RouletteSelectionMixin:
 
     def selection(self):
         fitnesses = self.fitnesses
@@ -19,16 +25,14 @@ class RouletteSelection:
                 return self.population[i]
 
 
-class StochasticUniversalSamplingSelection:
+class StochasticSelectionMixin:
 
     def selection(self, n):
-        # TODO: move relational fitnesses calculation to a common place
         fitnesses = self.fitnesses
         total_fitness = sum(fitnesses)
 
-        relational_fitnesses = [
-            fitness / total_fitness for fitness in fitnesses]
-        probabilities = np.cumsum(relational_fitnesses)
+        probabilities = np.cumsum([
+            fitness / total_fitness for fitness in fitnesses])
 
         initial_offset = random.random()
         spacing = 1 / len(self.population)
