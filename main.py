@@ -5,6 +5,7 @@ from gen.algorithms import (
     RouletteSelectionGeneticAlgorithm,
     SimpleGeneticAlgorithm,
     StochasticSelectionGeneticAlgorithm,
+    StochasticSimpleGeneticAlgorithm,
     TournamentSelectionGeneticAlgorithm,
 )
 
@@ -13,6 +14,7 @@ ALGORITHMS = {
     'simple': SimpleGeneticAlgorithm,
     'roulette': RouletteSelectionGeneticAlgorithm,
     'stochastic': StochasticSelectionGeneticAlgorithm,
+    'stochastic-simple': StochasticSimpleGeneticAlgorithm,
     'tournament': TournamentSelectionGeneticAlgorithm,
 }
 

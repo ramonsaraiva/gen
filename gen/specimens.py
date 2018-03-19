@@ -1,6 +1,8 @@
 import math
 import random
 
+from .mutations import GaussianElitismMutationMixin
+
 
 class Specimen:
 
@@ -23,7 +25,7 @@ class Specimen:
         raise NotImplementedError()
 
 
-class SimpleSpecimen(Specimen):
+class SimpleSpecimen(GaussianElitismMutationMixin, Specimen):
 
     RANGE = 20.0
     RANGE_OFFSET = 10.0
@@ -47,16 +49,6 @@ class SimpleSpecimen(Specimen):
     def crossover(self, other):
         self.x = (self.x + other.x) / 2
         self.y = (self.y + other.y) / 2
-
-    def mutate(self):
-        self.x = self.x * self.gaussian_multiplier()
-        self.y = self.y * self.gaussian_multiplier()
-
-    def gaussian_multiplier(self):
-        q = random.random()
-        q = (q * 2.0) - 1.0
-        q = q / 4.0
-        return 1.0 + q
 
 
 class WeirdSpecimen(SimpleSpecimen):

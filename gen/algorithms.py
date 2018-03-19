@@ -1,3 +1,5 @@
+import random
+
 from .mutations import GaussianElitismMutationMixin
 from .output import GeneticOutputMixin
 from .selections import (
@@ -90,6 +92,13 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
             specimen.crossover(selected[offset % len(selected)])
             offset += 1
 
+    def mutate(self, selected):
+        for specimen in self.population:
+            if specimen in selected:
+                continue
+            if random.random() < self.mutation_probability:
+                specimen.mutate()
+
     def process_generation(self, generation):
         selected = list(self.selection())
         self.crossover(selected)
@@ -98,16 +107,20 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
         self.output_population(generation)
 
 
-class SimpleGeneticAlgorithm(SimpleSelectionMixin, GaussianElitismMutationMixin,
-                             MetaGeneticAlgorithm):
+class SimpleGeneticAlgorithm(SimpleSelectionMixin, MetaGeneticAlgorithm):
     """
     Simple genetic algorithm replicating what SimpleAG.cpp does
     """
     specimen = SimpleSpecimen
 
 
+class StochasticSimpleGeneticAlgorithm(StochasticSelectionMixin,
+                                       MetaGeneticAlgorithm):
+    specimen = SimpleSpecimen 
+
+
 class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
-                                        SimpleGeneticAlgorithm):
+                                        MetaGeneticAlgorithm):
     """
     Roulette Selection with Gaussian Elitism Mutation
     """
@@ -116,7 +129,6 @@ class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
 
 
 class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,
-                                          GaussianElitismMutationMixin,
                                           MetaGeneticAlgorithm):
     """
     Stochastic Selection with Gaussian Elitism Mutation
@@ -126,7 +138,6 @@ class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,
 
 
 class TournamentSelectionGeneticAlgorithm(TournamentThreeTwoSelectionMixin,
-                                          GaussianElitismMutationMixin,
                                           MetaGeneticAlgorithm):
     """
     Tournament (of three, of two) Selection with Gaussian Elitism Mutation
