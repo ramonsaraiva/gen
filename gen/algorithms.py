@@ -28,6 +28,7 @@ class GeneticAlgorithm:
     def __init__(self, specimen=None):
         specimen = specimen or self.specimen
         self.population = [specimen(i) for i in range(self.population_size)]
+        self._generations = []
 
     @property
     def fitnesses(self):
@@ -106,7 +107,13 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
         self.crossover(selected)
         self.mutation(selected)
         self.calculate_fitness()
+
+        self._generations.append(self.fitnesses)
         self.output_population(generation)
+
+    def post(self):
+        self.plot_2d_fitness()
+        self.plot_2d_rounds()
 
 
 class SimpleGeneticAlgorithm(SimpleSelectionMixin, MetaGeneticAlgorithm):

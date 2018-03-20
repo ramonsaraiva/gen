@@ -24,3 +24,8 @@ class GeneticOutputMixin:
 
         plt.plot(ax, ay)
         plt.show()
+
+    def plot_2d_rounds(self):
+        plt.figure()
+        plt.boxplot([generation for generation in self._generations[:5]])
+        plt.show()
