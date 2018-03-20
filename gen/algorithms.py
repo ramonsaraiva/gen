@@ -103,17 +103,22 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
 
     def process_generation(self, generation):
         """Processes a generation, following the meta steps."""
+        self._generations.append([
+            (specimen.x, specimen.y, specimen.fitness)
+            for specimen in self.population])
+
         selected = list(self.selection())
         self.crossover(selected)
         self.mutation(selected)
         self.calculate_fitness()
 
-        self._generations.append(self.fitnesses)
         self.output_population(generation)
 
     def post(self):
-        self.plot_2d_fitness()
-        self.plot_2d_rounds()
+        self.draw_2d_fitness()
+        self.draw_2d_rounds()
+        self.draw_2d_fitness_fall()
+        self.show()
 
 
 class SimpleGeneticAlgorithm(SimpleSelectionMixin, MetaGeneticAlgorithm):

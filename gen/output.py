@@ -16,16 +16,36 @@ class GeneticOutputMixin:
             specimen.calculate_fitness()
             yield specimen
 
-    def plot_2d_fitness(self):
+    def draw_2d_fitness(self):
+        plt.figure()
+        plt.title("Fitness landscape")
         ax, ay = [], []
         for specimen in self.fitness_population():
             ax.append(specimen.x)
             ay.append(specimen.fitness)
 
         plt.plot(ax, ay)
-        plt.show()
+        plt.scatter(
+            *zip(*[(v[0], v[2]) for v in self._generations[0]]),  # ugly
+            color='pink')
+        plt.draw()
 
-    def plot_2d_rounds(self):
+    def draw_2d_rounds(self):
         plt.figure()
-        plt.boxplot([generation for generation in self._generations[:5]])
+        plt.title("Population per generation")
+        plt.boxplot([
+            [v[2] for v in generation] for generation in self._generations
+        ])
+        plt.draw()
+
+    def draw_2d_fitness_fall(self):
+        plt.figure()
+        plt.title("Fitness fall")
+        plt.plot([
+            min([v[2] for v in generation])
+            for generation in self._generations
+        ])
+        plt.draw()
+
+    def show(self):
         plt.show()
