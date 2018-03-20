@@ -1,6 +1,5 @@
 import random
 
-from .mutations import GaussianElitismMutationMixin
 from .output import GeneticOutputMixin
 from .selections import (
     RouletteSelectionMixin,
@@ -16,9 +15,7 @@ from .specimens import (
 
 
 class GeneticAlgorithm:
-    """
-    Base class for a genetic algorithm
-    """
+    """Base class for a genetic algorithm"""
 
     specimen = Specimen
 
@@ -33,13 +30,16 @@ class GeneticAlgorithm:
 
     @property
     def fitnesses(self):
+        """Returns a list of fitnesses of every specimen in the population."""
         return [specimen.fitness for specimen in self.population]
 
     def generate_population(self):
+        """Generates the data for each pre-allocated specimen."""
         for specimen in self.population:
             specimen.generate()
 
     def calculate_fitness(self):
+        """Calculates the fitness for each specimen in the population."""
         for specimen in self.population:
             specimen.calculate_fitness()
 
@@ -59,6 +59,10 @@ class GeneticAlgorithm:
         pass
 
     def run(self):
+        """
+        Runs the whole algorithm, generating a population, calculating its
+        fitnesses and processing every generation.
+        """
         self.generate_population()
         self.calculate_fitness()
 
@@ -71,35 +75,30 @@ class GeneticAlgorithm:
 class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
     """
     A meta genetic algorithm follows the simple order of:
-      * selection
-      * crossover
-      * mutation
-      * fitness calculation
+      1. selection
+      2. crossover
+      3. mutation
+      4. fitness re-calculation
     """
     population_size = 10
     generations = 10
     mutation_probability = 0.2
 
     def crossover(self, selected):
-        """
-        Crosses every specimen of the population to one of the selected
-        specimens.
-        """
-        offset = 0
-        for specimen in self.population:
-            if specimen == selected[offset % len(selected)]:
-                continue
-            specimen.crossover(selected[offset % len(selected)])
-            offset += 1
+        """Crosses every specimen to one of the selected ones."""
+        for i, specimen in enumerate(self.population):
+            if specimen != selected[i % len(selected)]:
+                specimen.crossover(selected[i % len(selected)])
 
     def mutation(self, selected):
+        """Mutates every unselected specimen based on a probability."""
         for specimen in self.population:
-            if specimen in selected:
-                continue
-            if random.random() < self.mutation_probability:
+            mutate = random.random() < self.mutation_probability
+            if specimen not in selected and mutate:
                 specimen.mutate()
 
     def process_generation(self, generation):
+        """Processes a generation, following the meta steps."""
         selected = list(self.selection())
         self.crossover(selected)
         self.mutation(selected)
@@ -108,33 +107,25 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
 
 
 class SimpleGeneticAlgorithm(SimpleSelectionMixin, MetaGeneticAlgorithm):
-    """
-    Simple genetic algorithm replicating what SimpleAG.cpp does
-    """
+    """Simple genetic algorithm replicating SimpleAG.cpp algorithm behaviour."""
     specimen = SimpleSpecimen
 
 
 class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
                                         MetaGeneticAlgorithm):
-    """
-    Roulette Selection with Gaussian Elitism Mutation
-    """
+    """Roulette Selection with different specimen."""
     specimen = WeirdSpecimen
     selection_size = 2
 
 
 class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,
                                           MetaGeneticAlgorithm):
-    """
-    Stochastic Selection with Gaussian Elitism Mutation
-    """
+    """Stochastic Selection with different specimen."""
     specimen = WeirdSpecimen
     selection_size = 4
 
 
 class TournamentSelectionGeneticAlgorithm(TournamentThreeTwoSelectionMixin,
                                           MetaGeneticAlgorithm):
-    """
-    Tournament (of three, of two) Selection with Gaussian Elitism Mutation
-    """
+    """Tournament (of three, of two) Selection with different specimen."""
     specimen = WeirdSpecimen

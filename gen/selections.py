@@ -3,10 +3,7 @@ import random
 
 
 class SimpleSelectionMixin: 
-    """
-    Simple selection used in SimpleAG, selects the specimen with the worst
-    fitness.
-    """
+    """Simple selection replicating the SimpleAG.cpp selection behaviour."""
 
     def selection(self):
         return [min(self.population)]

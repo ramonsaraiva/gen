@@ -1,9 +1,10 @@
 import random
 
-class GaussianElitismMutationMixin:
+class GaussianMutationMixin:
 
     @property
     def gaussian_multiplier(self):
+        """Multiplier used for the mutation of each value of a specimen."""
         q = random.random()
         q = (q * 2.0) - 1.0
         q = q / 4.0
