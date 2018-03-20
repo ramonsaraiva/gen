@@ -72,7 +72,7 @@ class WeirdSpecimen(SimpleSpecimen):
         """Calculates a pretty weird fitness."""
         self.fitness = sum([
             math.sin(pow(self.x, 3.0)),
-            math.sqrt(pow(self.x, 2.0)), # mod x?
+            math.sqrt(pow(self.x, 2.0)),  # mod x?
             math.sin(self.y) * 3.0,
             math.sqrt(math.sqrt(math.sqrt(pow(self.x, 2) + pow(self.y, 2))))
         ])

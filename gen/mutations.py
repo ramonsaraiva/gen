@@ -1,5 +1,6 @@
 import random
 
+
 class GaussianMutationMixin:
 
     @property

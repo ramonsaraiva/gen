@@ -110,7 +110,7 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
 
 
 class SimpleGeneticAlgorithm(SimpleSelectionMixin, MetaGeneticAlgorithm):
-    """Simple genetic algorithm replicating SimpleAG.cpp algorithm behaviour."""
+    """Simple genetic algorithm replicating SimpleAG algorithm behaviour."""
     specimen = SimpleSpecimen
 
 

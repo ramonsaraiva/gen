@@ -5,8 +5,8 @@ import random
 import numpy as np
 
 
-class SimpleSelectionMixin: 
-    """Simple selection replicating the SimpleAG.cpp selection behaviour."""
+class SimpleSelectionMixin:
+    """Simple selection replicating the SimpleAG selection behaviour."""
 
     def selection(self):
         return [min(self.population)]
@@ -43,6 +43,7 @@ class StochasticSelectionMixin:
             itertools.count(rand, avg), self.selection_size)
         for index in slices:
             yield self.population[bisect.bisect(cumulative_fitnesses, index)]
+
 
 class TournamentThreeTwoSelectionMixin:
     """
