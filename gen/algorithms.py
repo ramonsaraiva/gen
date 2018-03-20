@@ -1,3 +1,4 @@
+import itertools
 import random
 
 from .output import GeneticOutputMixin
@@ -86,9 +87,11 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
 
     def crossover(self, selected):
         """Crosses every specimen to one of the selected ones."""
-        for i, specimen in enumerate(self.population):
-            if specimen != selected[i % len(selected)]:
-                specimen.crossover(selected[i % len(selected)])
+        selected = itertools.cycle(selected)
+        for specimen in self.population:
+            current = next(selected)
+            if specimen != current:
+                specimen.crossover(current)
 
     def mutation(self, selected):
         """Mutates every unselected specimen based on a probability."""
