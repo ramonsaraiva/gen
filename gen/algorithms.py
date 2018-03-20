@@ -115,7 +115,7 @@ class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
                                         MetaGeneticAlgorithm):
     """Roulette Selection with different specimen."""
     specimen = WeirdSpecimen
-    selection_size = 2
+    selection_size = 1
 
 
 class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,
