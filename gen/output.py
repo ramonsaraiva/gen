@@ -25,14 +25,15 @@ class GeneticOutputMixin:
         """
         plt.figure()
         plt.title("Fitness landscape")
-        ax, ay = [], []
-        for specimen in self.fitness_population():
-            ax.append(specimen.x)
-            ay.append(specimen.fitness)
 
+        ax, ay = zip(*[
+            (specimen.x, specimen.fitness)
+            for specimen in self.fitness_population()])
         plt.plot(ax, ay)
+
+        print(self._generations[0])
         plt.scatter(
-            *zip(*[(v[0], v[2]) for v in self._generations[0]]),  # ugly
+            *zip(*[(v[0], v[2]) for v in self._generations[0]]),
             color='pink')
         plt.draw()
 

@@ -45,6 +45,9 @@ class GeneticAlgorithm:
         for specimen in self.population:
             specimen.calculate_fitness()
 
+    def should_mutate(self):
+        return random.random() < self.mutation_probability
+
     def selection(self):
         raise NotImplementedError()
 
@@ -95,8 +98,8 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
     def mutation(self, selected):
         """Mutates every unselected specimen based on a probability."""
         selected_for_mutation = [
-            spec for spec in self.population
-            if spec in selected and random.random() < self.mutation_probability]
+            specimen for specimen in self.population
+            if specimen in selected and self.should_mutate()]
         for specimen in selected_for_mutation:
             specimen.mutate()
 
