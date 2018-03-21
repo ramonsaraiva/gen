@@ -115,9 +115,9 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
         self.output_population(generation)
 
     def post(self):
-        self.draw_2d_fitness()
-        self.draw_2d_rounds()
-        self.draw_2d_fitness_fall()
+        self.draw_fitness_landscape()
+        self.draw_fitnesses_per_generation()
+        self.draw_fitness_fall()
         self.show()
 
 
