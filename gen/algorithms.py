@@ -88,18 +88,17 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
 
     def crossover(self, selected):
         """Crosses every specimen to one of the selected ones."""
-        selected = itertools.cycle(selected)
-        for specimen in self.population:
-            current = next(selected)
-            if specimen != current:
-                specimen.crossover(current)
+        for specimen, curr in zip(self.population, itertools.cycle(selected)):
+            if specimen != curr:
+                specimen.crossover(curr)
 
     def mutation(self, selected):
         """Mutates every unselected specimen based on a probability."""
-        for specimen in self.population:
-            mutate = random.random() < self.mutation_probability
-            if specimen not in selected and mutate:
-                specimen.mutate()
+        selected_for_mutation = [
+            spec for spec in self.population
+            if spec in selected and random.random() < self.mutation_probability]
+        for specimen in selected_for_mutation:
+            specimen.mutate()
 
     def process_generation(self, generation):
         """Processes a generation, following the meta steps."""
@@ -107,7 +106,7 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
             (specimen.x, specimen.y, specimen.fitness)
             for specimen in self.population])
 
-        selected = list(self.selection())
+        selected = self.selection()
         self.crossover(selected)
         self.mutation(selected)
         self.calculate_fitness()
