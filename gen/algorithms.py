@@ -115,6 +115,12 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
         self.output_population(generation)
 
     def post(self):
+        """
+        Draws all charts for algorithm analysis.
+            * fitness landscape with initial population dispersion
+            * population fitnesses per generation
+            * fitness fall
+        """
         self.draw_fitness_landscape()
         self.draw_fitnesses_per_generation()
         self.draw_fitness_fall()
