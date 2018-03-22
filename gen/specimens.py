@@ -65,8 +65,8 @@ class SimpleSpecimen(GaussianMutationMixin, Specimen):
 class WeirdSpecimen(SimpleSpecimen):
     """Similar to a SimpleSpecimen but with a different fitness calculation."""
 
-    RANGE = 200.0
-    RANGE_OFFSET = 100.0
+    RANGE = 100
+    RANGE_OFFSET = 50
 
     def calculate_fitness(self):
         """Calculates a pretty weird fitness."""

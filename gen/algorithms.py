@@ -91,9 +91,19 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
 
     def crossover(self, selected):
         """Crosses every specimen to one of the selected ones."""
-        for specimen, curr in zip(self.population, itertools.cycle(selected)):
-            if specimen != curr:
-                specimen.crossover(curr)
+        # TODO: refactor
+        population = []
+        for i in range(0, len(selected), 2):
+            a = selected[i]
+            b = selected[i + 1]
+            specimen = self.specimen(
+                len(population) + 1,
+                (a.x + b.x) / 2,
+                (a.y + b.y) / 2)
+            specimen.calculate_fitness()
+            population.append(specimen)
+        del self.population
+        self.population = population
 
     def mutation(self, selected):
         """Mutates every unselected specimen based on a probability."""
@@ -109,7 +119,7 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
             (specimen.x, specimen.y, specimen.fitness)
             for specimen in self.population])
 
-        selected = self.selection()
+        selected = list(self.selection())
         self.crossover(selected)
         self.mutation(selected)
         self.calculate_fitness()
@@ -132,23 +142,29 @@ class MetaGeneticAlgorithm(GeneticOutputMixin, GeneticAlgorithm):
 class SimpleGeneticAlgorithm(SimpleSelectionMixin, MetaGeneticAlgorithm):
     """Simple genetic algorithm replicating SimpleAG algorithm behaviour."""
     specimen = SimpleSpecimen
+    population_size = 10
+    selection_size = 20
 
 
 class RouletteSelectionGeneticAlgorithm(RouletteSelectionMixin,
                                         MetaGeneticAlgorithm):
     """Roulette Selection with different specimen."""
     specimen = WeirdSpecimen
-    selection_size = 1
+    population_size = 10
+    selection_size = 20
 
 
 class StochasticSelectionGeneticAlgorithm(StochasticSelectionMixin,
                                           MetaGeneticAlgorithm):
     """Stochastic Selection with different specimen."""
     specimen = WeirdSpecimen
-    selection_size = 4
+    population_size = 10
+    selection_size = 20
 
 
 class TournamentSelectionGeneticAlgorithm(TournamentThreeTwoSelectionMixin,
                                           MetaGeneticAlgorithm):
     """Tournament (of three, of two) Selection with different specimen."""
     specimen = WeirdSpecimen
+    population_size = 10
+    selection_size = 20

@@ -31,7 +31,6 @@ class GeneticOutputMixin:
             for specimen in self.fitness_population()])
         plt.plot(ax, ay)
 
-        print(self._generations[0])
         plt.scatter(
             *zip(*[(v[0], v[2]) for v in self._generations[0]]),
             color='pink')

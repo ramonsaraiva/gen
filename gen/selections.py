@@ -9,7 +9,8 @@ class SimpleSelectionMixin:
     """Simple selection replicating the SimpleAG selection behaviour."""
 
     def selection(self):
-        yield min(self.population)
+        for _ in range(self.selection_size):
+            yield min(self.population)
 
 
 class RouletteSelectionMixin:
