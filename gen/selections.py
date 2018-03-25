@@ -54,4 +54,4 @@ class TournamentThreeTwoSelectionMixin:
 
     def selection(self):
         for _ in range(self.selection_size):
-            yield max(random.sample(self.population, 3))
+            yield min(random.sample(self.population, 3))
